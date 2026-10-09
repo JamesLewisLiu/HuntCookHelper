@@ -1,0 +1,3 @@
+* text=auto
+*.hpp text eol=lf
+*.mm text eol=lf

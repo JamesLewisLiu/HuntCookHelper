@@ -1,0 +1,92 @@
+#pragma once
+#include "Sample.hpp"
+
+namespace hc::achievementSample {
+inline constexpr std::uintptr_t managerSlot = 0x1562dc8, managerVtable = 0x11ad190;
+inline constexpr std::uintptr_t dataVtable = 0x1185e38;
+inline constexpr std::uintptr_t get = 0xba270, set = 0xba414;
+inline constexpr std::uintptr_t eligible = 0xba1f8, claimedGet = 0xba99c, lastClaimedGet = 0xba6fc;
+inline constexpr std::uintptr_t refresh = 0x141eec;
+inline constexpr sample::Entry entries[] = {
+    {get, {0xf4,0x4f,0xbe,0xa9,0xfd,0x7b,0x01,0xa9,0xfd,0x43,0x00,0x91,0xf3,0x03,0x00,0xaa}},
+    {set, {0xff,0x43,0x02,0xd1,0xf6,0x57,0x06,0xa9,0xf4,0x4f,0x07,0xa9,0xfd,0x7b,0x08,0xa9}},
+    {eligible, {0xf4,0x4f,0xbe,0xa9,0xfd,0x7b,0x01,0xa9,0xfd,0x43,0x00,0x91,0xf3,0x03,0x00,0xaa}},
+    {claimedGet, {0xff,0x83,0x01,0xd1,0xf6,0x57,0x03,0xa9,0xf4,0x4f,0x04,0xa9,0xfd,0x7b,0x05,0xa9}},
+    {lastClaimedGet, {0xff,0x43,0x01,0xd1,0xf4,0x4f,0x03,0xa9,0xfd,0x7b,0x04,0xa9,0xfd,0x03,0x01,0x91}},
+    {refresh, {0xf6,0x57,0xbd,0xa9,0xf4,0x4f,0x01,0xa9,0xfd,0x7b,0x02,0xa9,0xfd,0x83,0x00,0x91}},
+};
+inline constexpr std::uintptr_t slots[][2] = {{managerVtable, 0x1423cc}, {dataVtable + 24, 0xbb47c},
+        {dataVtable + 32, 0xbb488}, {dataVtable + 40, 0xbb490}};
+
+struct Profile {
+    std::uintptr_t managerSlot = achievementSample::managerSlot;
+    std::uintptr_t managerVtable = achievementSample::managerVtable;
+    std::uintptr_t dataVtable = achievementSample::dataVtable;
+    std::uintptr_t get = achievementSample::get;
+    std::uintptr_t set = achievementSample::set;
+    std::uintptr_t eligible = achievementSample::eligible;
+    std::uintptr_t claimedGet = achievementSample::claimedGet;
+    std::uintptr_t lastClaimedGet = achievementSample::lastClaimedGet;
+    std::uintptr_t refresh = achievementSample::refresh;
+    std::size_t dataSize = 320;
+    std::size_t keyOffset = 256;
+    std::size_t targetsOffset = 288;
+    std::size_t progressCache = 312;
+    std::size_t claimedCache = 316;
+    std::size_t eligibleOffset = 280;
+    std::array<sample::Entry, 6> entries = {{
+        achievementSample::entries[0],
+        achievementSample::entries[1],
+        achievementSample::entries[2],
+        achievementSample::entries[3],
+        achievementSample::entries[4],
+        achievementSample::entries[5],
+    }};
+    std::array<std::array<std::uintptr_t, 2>, 4> slots = {{
+        {achievementSample::slots[0][0],achievementSample::slots[0][1]},
+        {achievementSample::slots[1][0],achievementSample::slots[1][1]},
+        {achievementSample::slots[2][0],achievementSample::slots[2][1]},
+        {achievementSample::slots[3][0],achievementSample::slots[3][1]},
+    }};
+};
+inline constexpr Profile original{};
+inline constexpr Profile japanese = [] {
+    Profile p = original;
+    p.managerSlot = 0x178c3a0;
+    p.managerVtable = 0x1336250;
+    p.dataVtable = 0x130d258;
+    p.get = 0xbc3b8;
+    p.set = 0xbc4fc;
+    p.eligible = 0xbc340;
+    p.claimedGet = 0xbca84;
+    p.lastClaimedGet = 0xbc7e4;
+    p.refresh = 0x144d68;
+    p.dataSize = 176;
+    p.keyOffset = 112;
+    p.targetsOffset = 144;
+    p.progressCache = 168;
+    p.claimedCache = 172;
+    p.eligibleOffset = 136;
+    p.entries[0] = {0xbc3b8, {0xf4,0x4f,0xbe,0xa9,0xfd,0x7b,0x01,0xa9,0xfd,0x43,0x00,0x91,0xf3,0x03,0x00,0xaa}};
+    p.entries[1] = {0xbc4fc, {0xff,0x43,0x02,0xd1,0xf6,0x57,0x06,0xa9,0xf4,0x4f,0x07,0xa9,0xfd,0x7b,0x08,0xa9}};
+    p.entries[2] = {0xbc340, {0xf4,0x4f,0xbe,0xa9,0xfd,0x7b,0x01,0xa9,0xfd,0x43,0x00,0x91,0xf3,0x03,0x00,0xaa}};
+    p.entries[3] = {0xbca84, {0xff,0x83,0x01,0xd1,0xf6,0x57,0x03,0xa9,0xf4,0x4f,0x04,0xa9,0xfd,0x7b,0x05,0xa9}};
+    p.entries[4] = {0xbc7e4, {0xff,0x43,0x01,0xd1,0xf4,0x4f,0x03,0xa9,0xfd,0x7b,0x04,0xa9,0xfd,0x03,0x01,0x91}};
+    p.entries[5] = {0x144d68, {0xf6,0x57,0xbd,0xa9,0xf4,0x4f,0x01,0xa9,0xfd,0x7b,0x02,0xa9,0xfd,0x83,0x00,0x91}};
+    p.slots[0] = {0x1336250, 0x145248};
+    p.slots[1] = {0x130d270, 0x42b08};
+    p.slots[2] = {0x130d278, 0xbd564};
+    p.slots[3] = {0x130d280, 0xbd56c};
+    return p;
+}();
+
+template<class Access> bool validate(Access &access, const Profile &p = original) {
+    for (const auto &entry : p.entries)
+        if (!access.accessible(entry.offset, entry.bytes.size(), 5) ||
+            !access.equalBytes(entry.offset, entry.bytes.data(), entry.bytes.size())) return false;
+
+    for (const auto &slot : p.slots)
+        if (!access.accessible(slot[0], 8, 1) || access.pointer(slot[0]) != access.address(slot[1])) return false;
+    return true;
+}
+}
